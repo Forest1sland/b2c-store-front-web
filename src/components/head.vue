@@ -3,9 +3,9 @@
         <div class="container">
             <div id="right">
                 <div id="btns">
-                    <a href="#">登录</a>
+                    <a href="#">登录 </a>
                     <span>|</span>
-                    <a href="#">注册</a>
+                    <a href="#"> 注册</a>
                 </div>
 
                 <div id="cartCenter">
@@ -27,9 +27,9 @@
 
     </div>
     <!-- logo+搜索框 -->
-    <div id="logoSearch" class="container" >
+    <div id="logoSearch" class="container">
         <!-- logo -->
-        <div>
+        <div id="logo">
             <img src="../assets/head.jpg">
         </div>
         <!-- 类别下拉 -->
@@ -37,8 +37,16 @@
 
         </div>
         <!-- 搜索框 -->
-        <div>
-
+        <div id="search">
+            <input type="text">
+            <button>
+                <svg t="1671850201508" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                    xmlns="http://www.w3.org/2000/svg" p-id="3227" width="30" height="30">
+                    <path
+                        d="M800.325189 757.224937l-74.466018-74.466018a276.037189 276.037189 0 1 0-41.550414 51.956468l69.281441 69.262991a33.210811 33.210811 0 0 0 46.734991 0 33.210811 33.210811 0 0 0 0-46.753441z m-309.118847 0.664216A220.058523 220.058523 0 1 1 711.264865 537.830631a220.058523 220.058523 0 0 1-220.058523 220.058522z"
+                        p-id="3228" fill="#616161"></path>
+                </svg>
+            </button>
         </div>
 
     </div>
@@ -50,18 +58,16 @@
 
 <style lang='scss' scoped>
 div {
-    font-size: 15px;
+    font-size: 12px;
 }
 
 #head {
     background-color: #333;
-    height: 50px;
+    height: 40px;
 }
 
 .container {
-
     height: 100%;
-
     width: 1226px;
     margin: 0 auto;
 
@@ -69,7 +75,7 @@ div {
 
 #right {
     float: right;
-    margin-right: 50px;
+
     display: flex;
     align-items: center;
     height: 100%;
@@ -94,12 +100,49 @@ div {
     text-align: center;
 }
 
+#logoSearch {
+    position: relative;
+}
 
+#logo {
+    margin-top: 12px;
+    width: 80px;
+    float: left;
+}
+
+#search {
+    border: 1px solid #e0e0e0;
+    height: 50px;
+    width: 300px;
+    float: right;
+    margin-top: 20px;
+    position: relative;
+}
+
+input {
+    height: 48px;
+    position: relative;
+    border: 0px;
+    outline: 0px;
+    margin-left: 12px;
+    font-size: 13px;
+    width: 234px;
+}
+
+button {
+    border: none;
+    border-left: 1px solid #e0e0e0;
+    height: 50px;
+    background-color: #fff;
+    float: right;
+    width: 50px;
+}
 
 img {
-    width: 100px;
-    height: 100px;
+    width: 70px;
+    height: 70px;
 }
+
 
 a {
     text-decoration: none;
