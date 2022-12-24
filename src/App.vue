@@ -1,7 +1,6 @@
 <template>
-  <div>
-    www
-  </div>
+  <RouterView />
+
 </template>
 
 <script setup>
