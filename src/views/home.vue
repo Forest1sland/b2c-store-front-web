@@ -25,16 +25,25 @@
                             </svg>
                         </div>
                     </div>
-                </div>
-                <!-- 类别hover -->
-                <div id="category-hover">
+                    <!-- 类别hover -->
+                    <div id="category-hover">
+                        <el-row>
+                            <el-col v-for="(o, index) in 24" :key="o" :span="6" :offset="index > 0 ? 2 : 0">
+                                <el-card :body-style="{ height: '76px' }" shadow="never">
+                                    <div class="item">
 
+                                    </div>
+                                </el-card>
+                            </el-col>
+                        </el-row>
+                    </div>
                 </div>
+
                 <!-- 轮播图 -->
                 <div id="carousel">
                     <a-carousel effect="fade" autoplay arrows>
                         <template #prevArrow>
-                            <div class="custom-slick-arrow" style="left: 240px; z-index: 1">
+                            <div class="custom-slick-arrow" style="left: 240px;">
                                 <svg t="1672108477789" class="icon" viewBox="0 0 1024 1024" version="1.1"
                                     xmlns="http://www.w3.org/2000/svg" p-id="2275" width="40" height="40">
                                     <path
@@ -96,7 +105,7 @@
                         <el-row :gutter="0">
                             <el-col v-for="(item, index) in products[index]" :key="index" :span="6"
                                 :offset="index > 0 ? 2 : 0">
-                                <el-card shadow="hover" class="product-item">
+                                <el-card shadow="hover" class="product-item" @click="toDetail(item.productId)">
                                     <img :src="item.productPicture.includes('http:') ? item.productPicture : 'http://127.0.0.1:3000/' + item.productPicture"
                                         class="img">
                                     <div style="padding: 14px">
@@ -169,6 +178,12 @@ instance({
 
 })
 
+instance({
+    url:'/product/byCategory',
+    data:{
+        categoryName:
+    }
+})
 
 const toCategory = categoryName => {
     router.push({
@@ -209,7 +224,7 @@ const toDetail = productId => {
     height: 460px;
     position: absolute;
     padding: 20px 0 20px 0;
-    z-index: 1;
+    z-index: 2;
 }
 
 .category-item {
@@ -220,9 +235,28 @@ const toDetail = productId => {
     cursor: pointer;
 }
 
+.category-item:hover~#category-hover {
+    display: inline-block;
+}
+
 .category-item-title {
     margin-left: 30px;
     color: #fff;
+}
+
+#category-hover {
+    display: none;
+    width: 992px;
+    left: 234px;
+    height: 460px;
+    position: absolute;
+    background-color: #fff;
+    z-index: 2;
+    top: 0;
+}
+
+.item {
+    height: 76px;
 }
 
 .carousel-img {
@@ -273,6 +307,7 @@ const toDetail = productId => {
 .arrow {
     margin-right: 10px;
 }
+
 
 
 #carousel {
