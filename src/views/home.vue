@@ -177,13 +177,15 @@ instance({
 
 
 })
+const getItem = categoryName => {
+    instance({
+        url: '/product/byCategory',
+        data: {
+            categoryName: categoryName
+        }
+    })
+}
 
-instance({
-    url:'/product/byCategory',
-    data:{
-        categoryName:
-    }
-})
 
 const toCategory = categoryName => {
     router.push({
