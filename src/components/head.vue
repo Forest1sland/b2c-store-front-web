@@ -8,13 +8,19 @@
             </div>
             <div id="right">
 
-                <div id="btns">
+                <div id="btns" v-if="!userStore.loginState">
                     <a @click="changeLogin">登录 </a>
                     <span>|</span>
                     <a @click="changeRegister"> 注册</a>
                 </div>
 
-                <div id="cartCenter">
+                <div v-if="userStore.loginState">
+                    <a @click="toOrder"> 我的订单 </a>
+                    <span>|</span>
+                    <a @click="toCollect">查看收藏</a>
+                </div>
+
+                <div id="cartCenter" @click="toCart">
                     <div id="cart">
                         <svg t="1671768704396" class="icon" viewBox="0 0 1028 1024" version="1.1"
                             xmlns="http://www.w3.org/2000/svg" p-id="2734" width="18" height="16">
@@ -39,10 +45,7 @@
         <div id="logo">
             <img src="../assets/head.jpg">
         </div>
-        <!-- 类别下拉 -->
-        <div>
 
-        </div>
         <!-- 搜索框 -->
         <div id="search">
             <input type="text">
@@ -109,6 +112,7 @@ import { User, View } from '@element-plus/icons-vue'
 import instance from '../axios/axios';
 import useUserStore from '../stores/userStore'
 import { ElMessage } from 'element-plus';
+import { useRouter } from 'vue-router';
 
 const userStore = useUserStore()
 
@@ -176,14 +180,14 @@ const Login = formEl => {
                 }
             }).then(res => {
                 //登录状态
-                userStore.loginState = true
+                userStore.setLoginState(true)
                 //用户id
-                userStore.userId = res
+                userStore.setUserId(res)
                 //隐藏登录页面
                 isLogin.value = false
                 //弹窗
                 ElMessage({
-                    message:'登录成功！',
+                    message: '登录成功！',
                     type: 'success',
                 })
             })
@@ -258,7 +262,7 @@ const Register = formEl => {
             }).then(res => {
                 //弹窗
                 ElMessage({
-                    message:'注册成功！',
+                    message: '注册成功！',
                     type: 'success',
                 })
             })
@@ -269,11 +273,31 @@ const Register = formEl => {
     })
 }
 
+const router = useRouter()
+const toOrder = () => {
+    router.push({
+        name: 'order'
+    })
+}
+const toCollect = () => {
+    router.push({
+        name: 'collect'
+    })
+}
+const toCart = () => {
+    if (userStore.loginState) {
+        router.push({
+            name: "cart"
+        })
+    } else {
+        ElMessage({
+            message: '请先登录。',
+            type:
+                'error'
+        })
+    }
 
-
-
-
-
+}
 
 
 

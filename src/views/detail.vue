@@ -29,7 +29,7 @@
                     </div>
                     <div id="product-price" class="product-text">
 
-                        {{ product.data.productPrice }}<br/>
+                        {{ product.data.productPrice }}<br />
                         {{ product.data.productSellingPrice }}
                     </div>
                     <div class="line"></div>
@@ -45,10 +45,10 @@
                     </div>
                     <div id="buttons">
                         <div id="addCart">
-                            <a href="#">加入购物车</a>
+                            <a @click="addCart">加入购物车</a>
                         </div>
                         <div id="addCollect">
-                            <a href="#">收藏</a>
+                            <a @click="addCollect">收藏</a>
                         </div>
                     </div>
                 </div>
@@ -84,6 +84,15 @@ instance({
     console.log(picture.data);
 })
 
+
+const addCart = () => {
+    // instance({
+    //     url:'/'
+    // })
+}
+const addCollect = () => {
+
+}
 </script>
 
 <style lang='scss' scoped>
@@ -126,21 +135,19 @@ instance({
 .img {
     width: 100%;
 }
-.product-text{
+
+.product-text {
     margin-top: 20px;
 }
+
 #product-name {
     font-size: 24px;
-    
-}
-
-#product-intro {
 
 }
 
-#product-price {
+#product-intro {}
 
-}
+#product-price {}
 
 .line {
     margin-top: 12px;

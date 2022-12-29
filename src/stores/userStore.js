@@ -7,9 +7,20 @@ const useUserStore = defineStore('userStore', () => {
   const loginState = ref(false)
   //登录用户账号
   const userId = ref()
+  const setLoginState = state => {
+    loginState.value = state
+  }
+  const setUserId = id => {
+    userId.value = id
+  }
 
 
-  return { loginState, userId }
-})
+  return { loginState, userId, setLoginState, setUserId }
+}, {
+  persist: {
+    enable: true,
+    storage: sessionStorage
+  },
+},)
 
 export default useUserStore

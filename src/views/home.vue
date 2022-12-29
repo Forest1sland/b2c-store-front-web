@@ -12,7 +12,8 @@
 
                 <!-- 类别 -->
                 <div id="category">
-                    <div class="category-item" v-for="item in category" :key="item">
+                    <div class="category-item" v-for="item in category" :key="item"
+                        @mouseenter="getItem(item.categoryName)">
                         <div class="category-item-title">
                             {{ item.categoryName }}
                         </div>
@@ -28,10 +29,12 @@
                     <!-- 类别hover -->
                     <div id="category-hover">
                         <el-row>
-                            <el-col v-for="(o, index) in 24" :key="o" :span="6" :offset="index > 0 ? 2 : 0">
-                                <el-card :body-style="{ height: '76px' }" shadow="never">
-                                    <div class="item">
-
+                            <el-col v-for="(o, index) in item" :key="o" :span="6" :offset="index > 0 ? 2 : 0">
+                                <el-card :body-style="{ height: '76px', padding: '0' }" shadow="never">
+                                    <div class="item" @click="toDetail(o.productId)">
+                                        <img :src="o.productPicture.includes('http:') ? o.productPicture : 'http://127.0.0.1:3000/' + o.productPicture"
+                                            class="category-img">
+                                        {{ o.productName }}
                                     </div>
                                 </el-card>
                             </el-col>
@@ -177,12 +180,17 @@ instance({
 
 
 })
+
+const item = ref([])
 const getItem = categoryName => {
     instance({
         url: '/product/byCategory',
         data: {
             categoryName: categoryName
         }
+    }).then(res => {
+        item.value = res
+        console.log(res);
     })
 }
 
@@ -257,8 +265,34 @@ const toDetail = productId => {
     top: 0;
 }
 
+#category-hover:hover {
+    display: block;
+}
+
 .item {
     height: 76px;
+    padding: 14px;
+    cursor: pointer;
+    display: block;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    -icab-text-overflow: ellipsis;
+    -khtml-text-overflow: ellipsis;
+    -moz-text-overflow: ellipsis;
+    -webkit-text-overflow: ellipsis;
+}
+
+.item:hover {
+    color: #ff6700;
+}
+
+.category-img {
+    width: 52px;
+    height: 52px;
+
 }
 
 .carousel-img {

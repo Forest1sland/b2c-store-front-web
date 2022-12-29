@@ -26,13 +26,29 @@ const router = createRouter({
       name: 'detail',
       path: '/detail/:productId',
       component: () => import('../views/detail.vue')
+    },
+    {
+      name: 'order',
+      path: '/order',
+      component: () => import('../views/order.vue')
+    },
+    {
+      name: 'collect',
+      path: '/collect',
+      component: () => import('../views/collect.vue')
+    },
+    {
+      name: 'cart',
+      path: '/cart',
+      component: () => import('../views/cart.vue')
     }
   ]
 })
 
 
 router.beforeEach((to, from, next) => {
-  if (from.matched.length) {
+
+  if (from.name == 'category' || from.name == 'all') {
     window.location = to.path
   } else next()
 })

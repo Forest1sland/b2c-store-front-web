@@ -26,7 +26,7 @@
         <div id="result-item" class="container">
             <el-row :gutter="20">
                 <el-col v-for="(item, index,) in product" :key="index" :span="6" :offset="index > 0 ? 2 : 0">
-                    <el-card class="product-item" shadow="hover">
+                    <el-card class="product-item" shadow="hover" @click="toDetail(item.productId)">
                         <img :src="item.productPicture.includes('http:') ? item.productPicture : 'http://127.0.0.1:3000/' + item.productPicture"
                             class="carousel-img">
                         <div style="padding: 14px">
@@ -124,9 +124,16 @@ const toCategory = categoryName => {
 
 }
 /**
- * 
+ * 跳转详情页
  */
-
+const toDetail = productId => {
+    router.push({
+        name: 'detail',
+        params: {
+            productId: productId
+        }
+    })
+}
 </script>
 
 <style lang='scss' scoped>
