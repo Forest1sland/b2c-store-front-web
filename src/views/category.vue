@@ -84,7 +84,7 @@ if (router.currentRoute.value.name == 'all') {
     */
     instance({
         method: 'get',
-        url: '/product/all'
+        url: '/product/getAll'
     }).then(res => {
         product.value = res
         console.log(product);

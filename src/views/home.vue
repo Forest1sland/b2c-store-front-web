@@ -70,9 +70,6 @@
                             <img :src="item.imgPath.includes('http:') ? item.imgPath : 'http://127.0.0.1:3000/' + item.imgPath"
                                 class="carousel-img">
                         </div>
-
-
-
                     </a-carousel>
 
 

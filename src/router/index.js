@@ -41,6 +41,11 @@ const router = createRouter({
       name: 'cart',
       path: '/cart',
       component: () => import('../views/cart.vue')
+    },
+    {
+      name:'confirmOrder',
+      path:'/confirmOrder',
+      component:()=>import('../views/confirmOrder.vue')
     }
   ]
 })
@@ -52,4 +57,6 @@ router.beforeEach((to, from, next) => {
     window.location = to.path
   } else next()
 })
+
+
 export default router

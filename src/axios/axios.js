@@ -6,14 +6,18 @@ const instance = axios.create({
     method: 'post'
 });
 
-instance.interceptors.response.use(function (response) {
+instance.interceptors.response.use((response, error) => {
     if (response.data.code == '200') {
+        ElMessage(response.data.msg)
         return response.data.data;
-    }
-    ElMessage(response.data.msg)
-    return Promise.reject(error);
 
-}, function (error) {
+    } else {
+
+        return Promise.reject(error);
+    }
+
+
+}, error => {
     if (error.response.data.status != '200') {
         ElMessage.error(error.message)
     }
