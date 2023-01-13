@@ -11,14 +11,24 @@
         <div id="body">
             <div id="list" class="container">
                 <div id="address">
-                    <div id="address-title">
+                    <div class="title">
                         收货地址
                     </div>
                     <div id="address-items">
                         <div class="address-item" v-for="(item, index) in addresses" :key="index">
-                            {{ item }}
+                            <div class="linkman">
+                                {{ item.linkman }}
+                            </div>
+
+                            <div class="phoneNumber">
+                                {{ item.phoneNumber }}
+                            </div>
+
+                            <div class="address">
+                                {{ item.address }}
+                            </div>
                         </div>
-                        <div id="addAddress">
+                        <div id="addAddress" @click="add">
                             <div id="icon">
                                 <svg t="1673408410824" class="icon" viewBox="0 0 1024 1024" version="1.1"
                                     xmlns="http://www.w3.org/2000/svg" p-id="4708" width="40" height="40">
@@ -35,19 +45,77 @@
                         </div>
                     </div>
                     <div id="product">
-                        <div id="product-title">
+                        <div class="title">
                             商品
                         </div>
-                        <div id="prpduct-items">
+                        <div id="product-items">
                             <div class="product-item" v-for="(item, index) in products" :key="index">
-                                {{ item }}
+
+
+                                <div class="product-item-img">
+                                    <img :src="item.productImg.includes('http:') ? item.productImg : 'http://127.0.0.1:3000/' + item.productImg"
+                                        class="img">
+                                </div>
+                                <div class="product-item-title">
+                                    {{ item.productName }}
+                                </div>
+                                <div class="product-item-price">
+                                    {{ item.price }} 元 x {{ item.num }}
+                                </div>
+                                <div class="product-item-total">
+                                    {{ item.price * item.num }}元
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="count">
+                        <div class="bill-detail">
+                            <div class="bill-value">
+                                {{ count }} 件
+                            </div>
+                            <div class="bill-key">
+                                商品件数：
+                            </div>
+
+                        </div>
+                        <div class="bill-detail">
+                            <div class="bill-value">
+                                {{ sum }} 元
+                            </div>
+                            <div class="bill-key">
+                                商品总价：
+                            </div>
+                        </div>
+                        <div class="bill-detail bill-big">
+                            <div class="bill-key">
+                                应付总额：
+                            </div>
+                            <div class="bill-sum">
+                                <div class="sum">
+                                    {{ sum }}
+                                </div>
+
+                                元
                             </div>
                         </div>
                     </div>
                 </div>
+                <div id="btns">
+                    <div id="buy-btn">
+                        <a @click="buy">立即下单</a>
+                    </div>
+                    <div id="back-btn">
+                        <a @click="backCart">返回购物车</a>
+                    </div>
+                </div>
             </div>
+
         </div>
     </div>
+    <Address v-model="isAddAddress" />
 </template>
 
 <script setup>
@@ -57,12 +125,12 @@ import Head from '../components/head.vue'
 import instance from '../axios/axios';
 import useUserStore from '../stores/userStore';
 import { ref } from 'vue';
-
+import Address from '../components/address.vue'
 
 const router = useRouter()
 const route = useRoute()
 const cartStore = useCartStore()
-console.log( cartStore.orderProducts);
+console.log(cartStore.orderProducts);
 const products = cartStore.orderProducts
 console.log(products);
 
@@ -78,8 +146,41 @@ instance({
     addresses.value = res
 })
 
+const isAddAddress = ref(false)
+
+const add = () => {
+    isAddAddress.value = isAddAddress.value ? false : true
+}
+
+//总数
+const count = ref(0)
+//合计
+const sum = ref(0)
+
+if (products.length > 1) {
+    count.value = products.reduce((prev, cur, index, arr) => {
+        return prev.num + cur.num
+    })
+    sum.value = products.reduce((prev, cur, index, arr) => {
+        return prev.num * prev.price + cur.num * cur.price
+    })
+} else if (val.length == 1) {
+    count.value = products[0].num
+    sum.value = products[0].num * products[0].price
+} else {
+    count.value = 0
+    sum.value = 0
+}
 
 
+const backCart = () => {
+    router.push({
+        name: 'cart'
+    })
+}
+// const add =()=>{
+//     address.value.add()
+// }
 </script>
 
 <style lang='scss' scoped>
@@ -122,29 +223,53 @@ instance({
 
 #list {
     background-color: #fff;
+    padding: 25px;
 
 }
 
 #address {
-    padding: 30px 0 30px 27px;
+    padding: 30px 0 30px 0px;
 
 }
 
-#address-title {
+.title {
     color: #333;
     font-size: 18px;
-
     line-height: 20px;
 }
 
-#address-item {
-    height: 180px;
-    float: left;
+.address-item {
+    display: inline-block;
 
+    width: 268px;
+    height: 178px;
+    border: 1px solid #e0e0e0;
+    cursor: pointer;
+    position: relative;
+    margin-right: 17px;
+    margin-bottom: 20px;
+    vertical-align: top;
+    -webkit-transition: all .4s ease;
+    transition: all .4s ease;
+}
+
+.linkman {
+    margin: 20px 0 10px 30px;
+    font-size: 18px;
+
+}
+
+.phoneNumber {
+    margin: 20px 0 10px 30px;
+}
+
+.address {
+    margin: 20px 0 10px 30px;
 }
 
 #address-items {
     margin: 20px 0 0 0;
+    display: flex;
 }
 
 #addAddress {
@@ -163,10 +288,161 @@ instance({
 
 }
 
+#addAddress:hover,
+.address-item:hover {
+    border-color: #b0b0b0;
+
+    path {
+        fill: #b0b0b0;
+    }
+}
+
+path {
+    transition: all .4s ease;
+}
+
 #icon {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate3d(-50%, -50%, 0);
+}
+
+#product-items {
+    margin: 30px 0 20px 0px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.product-item {
+    margin: 30px 0 16px 0;
+    -webkit-transition: all .4s ease;
+    transition: all .4s ease;
+}
+
+.product-item::after {
+    content: "";
+    height: 0;
+    visibility: hidden;
+    display: block;
+    clear: both;
+}
+
+#product-items::after {
+    content: "";
+    height: 0;
+    visibility: hidden;
+    display: block;
+    clear: both;
+}
+
+.product-item-img {
+    float: left;
+}
+
+.product-item-img img {
+    width: 30px;
+    height: 30px;
+}
+
+.product-item-title {
+    padding-left: 10px;
+    float: left;
+    width: 650px;
+}
+
+.product-item-price {
+    float: left;
+    width: 150px;
+    text-align: center;
+}
+
+.product-item-total {
+    float: left;
+    width: 290px;
+    text-align: right;
+    color: #ff6700;
+}
+
+
+.bill-detail {
+    position: relative;
+}
+
+.bill-detail::after {
+    content: "";
+    height: 0;
+    visibility: hidden;
+    display: block;
+    clear: both;
+}
+
+.bill-key {
+    float: right;
+    right: 150px;
+    position: absolute;
+}
+
+.bill-value {
+    float: right;
+    right: 30px;
+    position: relative;
+    color: #ff6700;
+}
+
+.bill-big {
+    margin-top: 25px;
+    position: relative;
+}
+
+.bill-sum {
+
+    float: right;
+    right: 30px;
+    position: relative;
+    color: #ff6700;
+    position: relative;
+    bottom: 22px;
+}
+
+.sum {
+    font-size: 34px;
+    display: inline-block;
+
+}
+
+#btns {
+    padding-bottom: 20px;
+}
+
+#btns::after {
+    content: "";
+    height: 0;
+    visibility: hidden;
+    display: block;
+    clear: both;
+}
+
+
+#back-btn a,
+#buy-btn a {
+
+    // display: inline-block;
+    line-height: 38px;
+    margin-right: 10px;
+    text-align: center;
+    width: 158px;
+    height: 38px;
+    float: right;
+}
+
+#buy-btn a {
+    background-color: #f25807;
+    color: #fff;
+}
+
+#back-btn a {
+    color: #757575;
+    background-color: #fff;
+    border: 1px solid #757575;
 }
 </style>

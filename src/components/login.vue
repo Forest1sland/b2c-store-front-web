@@ -1,6 +1,5 @@
 <template>
-    <el-dialog title="登录" width="300px" center>
-
+    <el-dialog title="登录" width="300px" center v-model="isLogin">
         <el-form ref="ruleForm" :model="LoginUser" status-icon :rules="LoginRules">
             <el-form-item prop="userName">
                 <el-input :prefix-icon="User" placeholder="请输入账号" v-model="LoginUser.userName" autocomplete="off" />

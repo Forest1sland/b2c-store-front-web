@@ -7,7 +7,7 @@ const useCartStore = defineStore('cartStore', () => {
   const setOrderProducts = products => {
     orderProducts.value = products
   }
-  return (orderProducts,setOrderProducts)
+  return { orderProducts, setOrderProducts }
 }, {
   persist: {
     enable: true,

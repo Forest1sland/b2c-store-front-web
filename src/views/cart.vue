@@ -93,14 +93,24 @@
                         |
                     </div>
                     <div class="count">
-                        已选择 {{ count }} 件
+                        已选择
+                        <div class="count-num">
+                            {{ count }}
+                        </div>
+
+                        件
                     </div>
 
                     <div class="btn" @click="toConfirmOrder">
                         去结算
                     </div>
                     <div class="sum">
-                        合计：{{ sum }}元
+                        合计：
+                        <div class="sum-num">
+                            {{ sum }}
+                        </div>
+
+                        元
                     </div>
                 </div>
             </div>
@@ -198,11 +208,14 @@ const changeNum = (productId, num) => {
 const cartStore = useCartStore()
 const toConfirmOrder = () => {
     if (count.value > 0) {
-        // cartStore.orderProducts = multipleSelection.value
         cartStore.setOrderProducts(multipleSelection.value)
         router.push({
             name: 'confirmOrder'
-
+        })
+    } else {
+        ElMessage({
+            type: 'info',
+            message: '请选择商品！'
         })
     }
 }
@@ -419,9 +432,21 @@ const toConfirmOrder = () => {
     color: #757575;
 }
 
+.count-num {
+    display: inline-block;
+
+    color: #ff6700;
+}
+
 .sum {
     float: right;
     line-height: 48px;
+    color: #ff6700;
+}
+
+.sum-num {
+    display: inline-block;
+    font-size: 26px;
     color: #ff6700;
 }
 

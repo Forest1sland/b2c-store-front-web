@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="注册" width="300px" center >
+    <el-dialog title="注册" width="300px" center v-model="isRegister">
         <el-form :model="RegisterUser" :rules="RegisterRules" status-icon ref="ruleForm">
             <el-form-item prop="userName">
                 <el-input :prefix-icon="User" placeholder="请输入账号" v-model="RegisterUser.userName"></el-input>
@@ -37,7 +37,10 @@ const userStore = useUserStore()
 /**
  * 注册
  */
-
+const isRegister = ref(false)
+const changeRegister = () => {
+    isRegister.value = isRegister.value ? false : true
+}
 const RegisterUser = reactive({
     userName: '',
     password: '',
