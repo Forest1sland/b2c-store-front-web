@@ -156,7 +156,11 @@ const category = ref([])
 const categorySlice = ref([])
 const products = ref([])
 instance({
-    url: '/category/all',
+    url: '/category/getByPage',
+    data: {
+        currentPage: 1,
+        pageSize: 10,
+    }
 }).then(res => {
     category.value = res
     console.log(category.value);

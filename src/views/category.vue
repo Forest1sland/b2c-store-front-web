@@ -91,7 +91,11 @@ if (router.currentRoute.value.name == 'all') {
     })
 
     instance({
-        url: '/category/all',
+        url: '/category/getByPage',
+        data: {
+            currentPage: 1,
+            pageSize: 10
+        }
     }).then(res => {
         category.value = res
         console.log(category.value);

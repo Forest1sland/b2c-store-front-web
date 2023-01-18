@@ -97,7 +97,6 @@
                         <div class="count-num">
                             {{ count }}
                         </div>
-
                         件
                     </div>
 
@@ -109,7 +108,6 @@
                         <div class="sum-num">
                             {{ sum }}
                         </div>
-
                         元
                     </div>
                 </div>
