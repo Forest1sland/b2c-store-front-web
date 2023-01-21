@@ -15,7 +15,8 @@
                         收货地址
                     </div>
                     <div id="address-items">
-                        <div class="address-item" v-for="(item, index) in addresses" :key="index">
+                        <div class="address-item" :class="{ active_address: checkAddress == item.addressId }"
+                            v-for="(item, index) in addresses" :key="index" @click="checkAddress = item.addressId">
                             <div class="linkman">
                                 {{ item.linkman }}
                             </div>
@@ -53,17 +54,17 @@
 
 
                                 <div class="product-item-img">
-                                    <img :src="item.productImg.includes('http:') ? item.productImg : 'http://127.0.0.1:3000/' + item.productImg"
+                                    <img :src="item.productPicture.includes('http:') ? item.productPicture : 'http://127.0.0.1:3000/' + item.productPicture"
                                         class="img">
                                 </div>
                                 <div class="product-item-title">
                                     {{ item.productName }}
                                 </div>
                                 <div class="product-item-price">
-                                    {{ item.price }} 元 x {{ item.num }}
+                                    {{ item.productPrice }} 元 x {{ item.productNum }}
                                 </div>
                                 <div class="product-item-total">
-                                    {{ item.price * item.num }}元
+                                    {{ item.productPrice * item.productNum }}元
                                 </div>
 
 
@@ -124,28 +125,38 @@ import useCartStore from '../stores/cartStore';
 import Head from '../components/head.vue'
 import instance from '../axios/axios';
 import useUserStore from '../stores/userStore';
-import { ref } from 'vue';
+import { ref, provide } from 'vue';
 import Address from '../components/address.vue'
 
 const router = useRouter()
 const route = useRoute()
 const cartStore = useCartStore()
-console.log(cartStore.orderProducts);
+
 const products = cartStore.orderProducts
-console.log(products);
+
 
 
 const userStore = useUserStore()
 const addresses = ref([])
-instance({
-    url: '/user/address/get',
-    data: {
-        userId: userStore.userId
-    }
-}).then(res => {
-    addresses.value = res
-})
+const checkAddress = ref()
 
+const getAddress = () => {
+    instance({
+        url: '/user/address/get',
+        data: {
+            userId: userStore.userId
+        }
+    }).then(res => {
+        addresses.value = res
+        if (res.length > 0) {
+            checkAddress.value = res[0].addressId
+        }
+        console.log(checkAddress);
+        isAddAddress.value = false
+    })
+}
+getAddress()
+provide("getAddress", getAddress)
 const isAddAddress = ref(false)
 
 const add = () => {
@@ -159,14 +170,14 @@ const sum = ref(0)
 
 if (products.length > 1) {
     count.value = products.reduce((prev, cur, index, arr) => {
-        return prev.num + cur.num
+        return prev.productNum + cur.productNum
     })
     sum.value = products.reduce((prev, cur, index, arr) => {
-        return prev.num * prev.price + cur.num * cur.price
+        return prev.productNum * prev.productPrice + cur.productNum * cur.productPrice
     })
-} else if (val.length == 1) {
-    count.value = products[0].num
-    sum.value = products[0].num * products[0].price
+} else if (products.length == 1) {
+    count.value = products[0].productNum
+    sum.value = products[0].productNum * products[0].productPrice
 } else {
     count.value = 0
     sum.value = 0
@@ -178,9 +189,17 @@ const backCart = () => {
         name: 'cart'
     })
 }
-// const add =()=>{
-//     address.value.add()
-// }
+
+const buy = () => {
+    instance({
+        url: '/order/add',
+        data: {
+            userId: userStore.userId,
+            addressId: checkAddress.value,
+            detailList: products
+        }
+    })
+}
 </script>
 
 <style lang='scss' scoped>
@@ -299,6 +318,10 @@ const backCart = () => {
 
 path {
     transition: all .4s ease;
+}
+
+.active_address {
+    border: 1px solid #ff6700;
 }
 
 #icon {

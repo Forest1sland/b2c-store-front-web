@@ -32,24 +32,24 @@
                     <el-table-column type="selection" width="110" />
                     <el-table-column width="120">
                         <template #default="scope">
-                            <img :src="scope.row.productImg.includes('http:') ? scope.row.productImg : 'http://127.0.0.1:3000/' + scope.row.productImg"
+                            <img :src="scope.row.productPicture.includes('http:') ? scope.row.productPicture : 'http://127.0.0.1:3000/' + scope.row.productPicture"
                                 class="img" height="80" width="80" :alt="scope.row.productName">
                         </template>
                     </el-table-column>
                     <el-table-column label="商品名称" width="380">
                         <template #default="scope">{{ scope.row.productName }}</template>
                     </el-table-column>
-                    <el-table-column property="price" label="单价" width="120">
-                        <template #default="scope">{{ scope.row.price }}元</template>
+                    <el-table-column property="productPrice" label="单价" width="120">
+                        <template #default="scope">{{ scope.row.productPrice }}元</template>
                     </el-table-column>
                     <el-table-column label="数量" width="180" align="center">
                         <template #default="scope">
                             <div class="change-goods-num ">
                                 <a @click="if (scope.row.num + 1 > scope.row.maxNum) {
-                                    scope.row.num = scope.row.maxNum
+                                    scope.row.productNum = scope.row.maxNum
                                 } else {
-                                    scope.row.num++
-                                    changeNum(scope.row.productId, scope.row.num)
+                                    scope.row.productNum++
+                                    changeNum(scope.row.productId, scope.row.productNum)
                                 }; ">
                                     <svg t="1673346738719" class="icon" viewBox="0 0 1024 1024" version="1.1"
                                         xmlns="http://www.w3.org/2000/svg" p-id="2690" width="15" height="15">
@@ -58,14 +58,14 @@
                                             fill="#444444" p-id="2691"></path>
                                     </svg>
                                 </a>
-                                <input type="text" autocomplete="off" class="goods-num" v-model="scope.row.num" @change="if (scope.row.num > scope.row.maxNum) {
-                                    scope.row.num = scope.row.maxNum
-                                } else if (scope.row.num < 1) { scope.row.num = 1 } else {
-                                    changeNum(scope.row.productId, scope.row.num)
+                                <input type="text" autocomplete="off" class="goods-num" v-model="scope.row.productNum" @change="if (scope.row.productNum > scope.row.maxNum) {
+                                    scope.row.productNum = scope.row.maxNum
+                                } else if (scope.row.productNum < 1) { scope.row.productNum = 1 } else {
+                                    changeNum(scope.row.productId, scope.row.productNum)
                                 };">
-                                <a @click="if (scope.row.num - 1 < 1) { scope.row.num = 1 } else {
-                                    scope.row.num--
-                                    changeNum(scope.row.productId, scope.row.num)
+                                <a @click="if (scope.row.productNum - 1 < 1) { scope.row.productNum = 1 } else {
+                                    scope.row.productNum--
+                                    changeNum(scope.row.productId, scope.row.productNum)
                                 }; ">
                                     <svg t="1673346768608" class="icon" viewBox="0 0 1024 1024" version="1.1"
                                         xmlns="http://www.w3.org/2000/svg" p-id="3737" width="15" height="15">
@@ -78,7 +78,7 @@
                         </template>
                     </el-table-column>
                     <el-table-column label="小计" width="200" align="center">
-                        <template #default="scope">{{ scope.row.price * scope.row.num }}元</template>
+                        <template #default="scope">{{ scope.row.productPrice * scope.row.productNum }}元</template>
                     </el-table-column>
                     <el-table-column property="address" label="操作" width="100" align="center">
                         x
@@ -162,14 +162,14 @@ const handleSelectionChange = (val) => {
     multipleSelection.value = val
     if (val.length > 1) {
         count.value = multipleSelection.value.reduce((prev, cur, index, arr) => {
-            return prev.num + cur.num
+            return prev.productNum + cur.productNum
         })
         sum.value = multipleSelection.value.reduce((prev, cur, index, arr) => {
-            return prev.num * prev.price + cur.num * cur.price
+            return prev.productNum * prev.productPrice + cur.productNum * cur.productPrice
         })
     } else if (val.length == 1) {
-        count.value = val[0].num
-        sum.value = val[0].num * val[0].price
+        count.value = val[0].productNum
+        sum.value = val[0].productNum * val[0].productPrice
     } else {
         count.value = 0
         sum.value = 0
@@ -188,15 +188,15 @@ const toAll = () => {
     })
 }
 
-const changeNum = (productId, num) => {
-    console.log(productId, num)
+const changeNum = (productId, productNum) => {
+    console.log(productId, productNum)
 
     instance({
         url: '/cart/update',
         data: {
             userId: userStore.userId,
             productId: productId,
-            num: num,
+            productNum: productNum,
         }
     }).then(res => {
         // ElMessage(res)
@@ -227,7 +227,7 @@ const toConfirmOrder = () => {
 //         data: {
 //             userId: userStore.userId,
 //             productId: productId,
-//             num: num
+//             productNum: productNum
 //         }
 //     }).then(res => {
 
@@ -259,7 +259,6 @@ const toConfirmOrder = () => {
 
 #cart {
     background-color: #f5f5f5;
-    height: 2000px;
     padding-top: 38px;
 }
 

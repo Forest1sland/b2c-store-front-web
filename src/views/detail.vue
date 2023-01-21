@@ -48,7 +48,8 @@
                             <a @click="addCart">加入购物车</a>
                         </div>
                         <div id="addCollect">
-                            <a @click="addCollect">收藏</a>
+                            <a @click="addCollect" v-if="isCollect">收藏</a>
+                            <a @click="addCollect" v-else>取消收藏</a>
                         </div>
                     </div>
                 </div>
@@ -61,11 +62,32 @@
 import Head from '../components/head.vue'
 import { useRoute } from 'vue-router';
 import instance from '../axios/axios';
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
+import useUserStore from '../stores/userStore';
+
+const userStore = useUserStore()
 const route = useRoute()
 
 const product = reactive({ data: '' })
 const picture = reactive({ data: '' })
+
+const isCollect = ref(true)
+const check = () => {
+    instance({
+        url: '/collect/check',
+        data: {
+            userId: userStore.userId,
+            productId: route.params.productId
+        }
+    }).then(res => {
+        if (res == 1) {
+            isCollect.value = false
+        } else {
+            isCollect.value = true
+        }
+    })
+}
+check()
 instance({
     url: '/product/detail',
     data: {
@@ -74,6 +96,8 @@ instance({
 }).then(res => {
     product.data = res
 })
+
+
 instance({
     url: '/product/picture/get',
     data: {
@@ -86,11 +110,26 @@ instance({
 
 
 const addCart = () => {
-    // instance({
-    //     url:'/'
-    // })
+    instance({
+        url: '/cart/add',
+        data: {
+            userId: userStore.userId,
+            productId: route.params.productId
+        }
+    })
+
 }
 const addCollect = () => {
+    instance({
+        url: '/collect/add',
+        data: {
+            userId: userStore.userId,
+            productId: route.params.productId
+        }
+    }).then(res => {
+        check()
+    })
+
 
 }
 </script>

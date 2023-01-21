@@ -5,7 +5,8 @@
                 <el-input :prefix-icon="User" placeholder="请输入联系人!" v-model="address.linkman"></el-input>
             </el-form-item>
             <el-form-item prop="phone">
-                <el-input :prefix-icon="View" type="text" placeholder="请输入练习电话" v-model="address.phoneNumber"></el-input>
+                <el-input :prefix-icon="View" type="text" placeholder="请输入练习电话"
+                    v-model="address.phoneNumber"></el-input>
             </el-form-item>
             <el-form-item prop="address">
                 <el-input :prefix-icon="View" type="text" placeholder="请再输入详细地址!" v-model="address.address"></el-input>
@@ -20,10 +21,13 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue';
+import { reactive, ref, inject } from 'vue';
 import instance from '../axios/axios';
 import { User, View } from '@element-plus/icons-vue'
 import useUserStore from '../stores/userStore';
+
+
+const getAddress = inject("getAddress")
 const userStore = useUserStore()
 const isAdd = ref(false) // 控制注册组件是否显示
 const address = reactive({
@@ -34,6 +38,7 @@ const address = reactive({
 })
 const add = () => {
     isAddAddress.value = isAddAddress.value ? false : true
+
 }
 
 const save = () => {
@@ -43,6 +48,8 @@ const save = () => {
     instance({
         url: '/user/address/add',
         data: address
+    }).then(res => {
+        getAddress()
     })
 }
 

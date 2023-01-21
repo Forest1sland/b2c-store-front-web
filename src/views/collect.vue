@@ -31,9 +31,9 @@
                 </el-row>
 
             </div>
-            <div class="page">
+            <!-- <div class="page">
                 <el-pagination background layout="prev, pager, next" :total="1000" center />
-            </div>
+            </div> -->
 
         </div>
 
@@ -66,6 +66,18 @@ const toDetail = productId => {
         params: {
             productId: productId
         }
+    })
+}
+
+const collect = () => {
+    instance({
+        url: '/collect/add',
+        data: {
+            userId: userStore.userId,
+            productId: router.params.productId,
+        }
+    }).then(() => {
+        
     })
 }
 </script>
