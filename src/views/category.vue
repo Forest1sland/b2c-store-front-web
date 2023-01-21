@@ -7,12 +7,13 @@
             <el-breadcrumb :separator-icon="ArrowRight">
                 <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
                 <el-breadcrumb-item :to="{ name: 'all' }">全部分类</el-breadcrumb-item>
-                <el-breadcrumb-item v-if="!isAll">{{ route.params.categoryName }}</el-breadcrumb-item>
+                <el-breadcrumb-item v-if="isAll == 'category'">{{ route.params.categoryName }}</el-breadcrumb-item>
+                <el-breadcrumb-item v-if="isAll == 'search'">搜索结果</el-breadcrumb-item>
             </el-breadcrumb>
-
         </div>
+
         <!-- 选择类别 -->
-        <div class="category-choice" v-if="isAll">
+        <div class="category-choice" v-if="isAll == 'all'">
             <div id="choice" class="container">
                 <div class="category-title">
                     分类：
@@ -64,7 +65,7 @@ const reload = inject('reload')
 console.log(router.currentRoute.value.name);
 
 
-const isAll = ref(true)
+const isAll = ref('')
 const product = ref([])
 const category = ref([])
 
@@ -78,13 +79,16 @@ if (router.currentRoute.value.name == 'all') {
     * 如为单独类型false显示面包屑类别
     * 
     */
-    isAll.value = true
+    isAll.value = 'all'
     /**
     * 获取当前类别商品
     */
     instance({
-        method: 'get',
-        url: '/product/getAll'
+        url: '/product/getAll',
+        data: {
+            currentPage: 1,
+            pageSize: 20
+        }
     }).then(res => {
         product.value = res
         console.log(product);
@@ -101,8 +105,8 @@ if (router.currentRoute.value.name == 'all') {
         console.log(category.value);
     })
 
-} else {
-    isAll.value = false
+} else if (router.currentRoute.value.name == 'category') {
+    isAll.value = 'category'
     instance({
         url: '/product/byCategory',
         data: {
@@ -113,6 +117,16 @@ if (router.currentRoute.value.name == 'all') {
         console.log(product);
     })
 
+} else if (router.currentRoute.value.name == 'search') {
+    isAll.value = 'search'
+    instance({
+        url: '/search/search',
+        data: {
+            keyWord: route.params.keyWord
+        }
+    }).then(res => {
+        product.value = res
+    })
 }
 /**
  * 跳转页面

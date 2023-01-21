@@ -30,6 +30,15 @@ const router = createRouter({
       },
       component: () => import('../views/category.vue')
     },
+    //搜索结果
+    {
+      name: 'search',
+      path: '/search/:keyWord',
+      meta: {
+        title: '搜索结果'
+      },
+      component: () => import('../views/category.vue')
+    },
     //商品详情
     {
       name: 'detail',
@@ -80,7 +89,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   document.title = to.meta.title
-  if (from.name == 'category' || from.name == 'all') {
+  if (from.name == 'category' || from.name == 'all' || from.name == 'search') {
     window.location = to.path
   } else next()
 })

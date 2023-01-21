@@ -1,6 +1,6 @@
 <template>
 
-    <Head />
+    <Head ref="head" />
 
     <div id="main">
 
@@ -108,6 +108,10 @@ instance({
     console.log(picture.data);
 })
 
+const head = ref(null);     //RefChilde 要和Son组件上的class名相同
+const fnCallChild = () => {
+    head.value.getCount();      //changeLogin是子组件里的方法
+};
 
 const addCart = () => {
     instance({
@@ -116,6 +120,8 @@ const addCart = () => {
             userId: userStore.userId,
             productId: route.params.productId
         }
+    }).then(res => {
+        fnCallChild()
     })
 
 }
