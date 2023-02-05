@@ -224,7 +224,7 @@ const buy = () => {
 
 #body {
     background-color: #f5f5f5;
-    height: 2000px;
+
     padding-top: 38px;
 }
 

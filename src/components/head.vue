@@ -72,7 +72,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, defineExpose } from 'vue';
+import { ref, reactive, defineExpose, watch } from 'vue';
 import { User, View } from '@element-plus/icons-vue'
 import instance from '../axios/axios';
 import useUserStore from '../stores/userStore'
@@ -80,7 +80,7 @@ import { ElMessage } from 'element-plus';
 import { useRouter } from 'vue-router';
 import Login from './login.vue';
 import Register from './register.vue';
-import { get } from 'lodash';
+
 
 const userStore = useUserStore()
 
@@ -151,7 +151,16 @@ const getCount = () => {
         count.value = res
     })
 }
-getCount()
+if (userStore.userId) {
+    getCount()
+}
+
+watch(() => userStore.userId, (newUserId, oldUserId) => {
+    console.log('new ' + newUserId);
+    console.log('old ' + oldUserId);
+    changeLogin()
+}, { deep: true })
+
 
 /**
  * 暴露给父组件调用登录窗口

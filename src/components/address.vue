@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, inject } from 'vue';
+import { reactive, ref, inject, defineExpose } from 'vue';
 import instance from '../axios/axios';
 import { User, View } from '@element-plus/icons-vue'
 import useUserStore from '../stores/userStore';

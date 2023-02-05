@@ -32,9 +32,7 @@ const userStore = useUserStore()
  */
 
 const isLogin = ref(false)
-const changeLogin = () => {
-    isLogin.value = isLogin.value ? false : true
-}
+
 const LoginUser = reactive({
     userName: '',
     password: ''

@@ -12,7 +12,8 @@
         <div class="body">
 
             <div class="main container">
-                <div v-for="(item, index ) in orders" :key="index">
+                <el-empty description="暂无订单。" v-if="!orders"/>
+                <div v-for="(item, index ) in orders" :key="index" style="margin-bottom: 20px;">
                     <el-table :data="item.detailList" style="width: 100%">
 
                         <el-table-column label="商品名称" width="686" center>
@@ -95,7 +96,7 @@ instance({
 
 .body {
     background-color: #f5f5f5;
-    height: 2000px;
+
     padding-top: 38px;
 }
 
@@ -108,7 +109,7 @@ instance({
 }
 
 .main {
-    background-color: #fff;
+    // background-color: #fff;
 }
 
 .item-picname {
